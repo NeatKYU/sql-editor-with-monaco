@@ -8,6 +8,7 @@
             language="sql"
             v-model:value="editorStr"
             @change="(value: string) => { handleChange(value) }"
+            @mouseup="handleSelectText"
         />
         <!-- <button :onClick="handleRun">run</button> -->
     </div>
@@ -25,7 +26,7 @@ const props = defineProps({
 })
 const editorStr = ref(props.content);
 const monacoRef = ref();
-const emits = defineEmits(['changeContent']);
+const emits = defineEmits(['changeContent', 'selectContent']);
 
 const scrollOptions = {
     // Scroll Options
@@ -53,6 +54,11 @@ const options = {
 const handleChange = (value: string) => {
     editorStr.value = value;
     emits('changeContent', value);
+}
+
+const handleSelectText = () => {
+    const selectText = window.getSelection()?.toString();
+    emits('selectContent', selectText)
 }
 
 // const handleRun = () => {

@@ -7,7 +7,7 @@
             @click="handleActive(tab.id)"
         >
             <span>{{ tab.label }}</span>
-            <div class="remove-tab" @click="handleRemoveTab(tab.id)">
+            <div class="remove-tab" @click="(e) => handleRemoveTab(e, tab.id)">
                 <img src="@/assets/cancel.svg" />
             </div>
         </div>
@@ -19,7 +19,12 @@
         <Toolbar @sqlRun="sqlRun" @sqlSave="sqlSave"/>
     </div>
     <div v-for="tab in tabs" :class="tab.id === activeTabId ? 'monaco-wrapper': ''">
-        <Monaco v-if="tab.id === activeTabId" :content="tab.contents" @changeContent="changeContent"/>
+        <Monaco 
+            v-if="tab.id === activeTabId" 
+            :content="tab.contents" 
+            @changeContent="changeContent" 
+            @selectContent="selectContent"
+        />
     </div>
 </template>
 
@@ -31,30 +36,43 @@ import { reactive, ref } from 'vue'
 const activeTabId = ref(0);
 const tabId = ref(0);
 const tabs = reactive([
-  { id: 0, label: 'monaco', contents: ''}
+    { id: 0, label: 'monaco', contents: '', select: ''}
 ])
 const handleActive = (id: number) => {
-  activeTabId.value = id
+    activeTabId.value = id
 }
 const handleAddTab = () => {
-  tabId.value++;
-  const newTab = { id: Date.now(), label: 'new editor'+tabId.value, contents: ''};
-  tabs.push(newTab)
+    tabId.value++;
+    const newTab = { id: Date.now(), label: 'new editor' + tabId.value, contents: '', select: ''};
+    activeTabId.value = newTab.id;
+    tabs.push(newTab)
 }
-const handleRemoveTab = (removeId: number) => {
-  // const modifyTabs = tabs.filter((item) => item.id !== removeIndex);
-  tabs.splice(tabs.findIndex((item) => item.id === removeId), 1)
+const handleRemoveTab = (e: MouseEvent, removeId: number) => {
+    e.preventDefault();
+    // const modifyTabs = tabs.filter((item) => item.id !== removeIndex);
+    tabs.splice(tabs.findIndex((item) => item.id === removeId), 1)
 }
 const changeContent = (value: string) => {
-  tabs.map((item) => {
-    if (item.id === activeTabId.value) {
-      item.contents = value;
-    }
-  })
+    tabs.map((item) => {
+        if (item.id === activeTabId.value) {
+            item.contents = value;
+        }
+    })
+}
+const selectContent = (value: string) => {
+    tabs.map((item) => {
+        if (item.id === activeTabId.value) {
+            item.select = value;
+        }
+    })
 }
 const sqlRun = () => {
-    const content = tabs[tabs.findIndex((item) => item.id === activeTabId.value)].contents
-    console.log(content)
+    const tab = tabs[tabs.findIndex((item) => item.id === activeTabId.value)];
+    if (window.getSelection()?.toString()) {
+        console.log('select text = ', tab.select)
+    } else {
+        console.log('contents = ', tab.contents)
+    }
 }
 const sqlSave = () => {
     
@@ -67,7 +85,7 @@ const sqlSave = () => {
   height: 35px;
   display: flex;
 
-  background-color: lightgray;
+  background-color: rgb(72, 72, 72);
 
   /* padding: 0 20px; */
 
@@ -92,7 +110,9 @@ const sqlSave = () => {
   display: flex;
   justify-content: start;
   align-items: center;
-
+  
+  color: white;
+  
   span {
     display: inline-block;
     overflow: hidden;
@@ -103,18 +123,18 @@ const sqlSave = () => {
   cursor: pointer;
 
   &:hover {
-    background-color: #e8e8e8;
+    background-color: #787878;
   }
 
   &-active {
-    background-color: white;
-    border: 1px solid #e2e2e2;
+    background-color: #2e2e2e;
+    border: 1px solid #2e2e2e;
     border-bottom: none;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 
     &:hover {
-      background-color: white;
+      background-color: #575757;
     }
   }
 }

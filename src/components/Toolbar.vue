@@ -35,7 +35,7 @@ const handleSave = () => {
 
     gap: 5px;
 
-    background-color: lightgray;
+    background-color: #2e2e2e;
 
     button {
         width: 30px;
