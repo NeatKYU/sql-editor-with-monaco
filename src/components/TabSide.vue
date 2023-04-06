@@ -6,13 +6,15 @@
             :class="activeTabId === tab.id ? 'tab-active' : ''" 
             @click="handleActive(tab.id)"
         >
+            <div class="left-shape"></div>
             <span>{{ tab.label }}</span>
             <div class="remove-tab" @click="(e) => handleRemoveTab(e, tab.id)">
-                <img src="@/assets/cancel.svg" />
+                <font-awesome-icon :icon="['fas', 'xmark']" />
             </div>
+            <div class="right-shape"></div>
         </div>
         <div class="add-tab" @click="handleAddTab">
-            <img src="@/assets/plus.svg"/>
+            <font-awesome-icon :icon="['fas', 'plus']" color="#fff" />
         </div>
     </div>
     <div class="tool-bar-wrapper">
@@ -102,30 +104,59 @@ const sqlSave = () => {
 
 .tab {
   /* min-width: 100px; */
-  width: 100px;
-  padding: 0 20px 0 5px;
-
+  width: 110px;
+  /* padding: 0 20px 0 5px; */
+  /* padding-left: 5px; */
   position: relative;
 
   display: flex;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
   
   color: white;
-  
+
   span {
+    max-width: 70px;
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-right: 10px;
   }
 
   cursor: pointer;
 
   &:hover {
     background-color: #787878;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        height: 10px;
+        width: 20px;
+        background-color: transparent;
+    }
+
+    &:before {
+        left: -20px;
+        bottom: 0;
+        border-bottom-right-radius: 20px;
+        box-shadow: #787878 12px 1px 0px 1px;
+    }
+
+    &:after {
+        right: -20px;
+        bottom: 0;
+        border-bottom-left-radius: 20px;
+        box-shadow: #787878 -12px 1px 0px 1px;
+        z-index: 10;
+    }
   }
 
+  // tab active
   &-active {
     background-color: #2e2e2e;
     border: 1px solid #2e2e2e;
@@ -133,47 +164,104 @@ const sqlSave = () => {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 
+    position: relative;
+
     &:hover {
-      background-color: #575757;
+      background-color: #2e2e2e;
+
+      &:before {
+        box-shadow: #2e2e2e 12px 1px 0px 1px;
+      }
+      &:after {
+        box-shadow: #2e2e2e -12px 1px 0px 1px;
+      }
+    }
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        height: 10px;
+        width: 20px;
+        background-color: transparent;
+    }
+
+    &:before {
+        left: -20px;
+        bottom: 0;
+        border-bottom-right-radius: 20px;
+        box-shadow: #2e2e2e 12px 1px 0px 1px;
+    }
+
+    &:after {
+        right: -20px;
+        bottom: 0;
+        border-bottom-left-radius: 20px;
+        box-shadow: #2e2e2e -12px 1px 0px 1px;
+        z-index: 10;
     }
   }
 }
 .add-tab {
-  width: 30px;
-  margin: 5px;
+    width: 30px;
+    margin: 5px;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  cursor: pointer;
+    cursor: pointer;
 
-  border-radius: 5px;
-  border: 1px solid gray;
-  background-color: white;
+    border-radius: 5px;
+    /* border: 1px solid gray; */
+    /* background-color: white; */
 
-  &:hover {
-    background-color: #e8e8e8;
-  }
+    &:hover {
+        /* background-color: #e8e8e8; */
+        background-color: #2e2e2e;
+        transition: background-color 0.5s;
+    }
+    transition: background-color 0.5s;
 }
 
 .remove-tab {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 2px;
+  top: 2px;
 
   width: 15px;
-  height: 12px;
+  height: 15px;
+
+  font-size: 13px;
 
   display: flex;
   justify-content: center;
   align-items: center;
+
+  border-radius: 50%;
   
   cursor: pointer;
+
+  &:hover {
+    background-color: #444444;
+  }
 }
 
 .monaco-wrapper {
   width: 100%;
   height: calc(100% - 65px);
 }
+
+/* .divider {
+    width: 1px;
+    height: 70%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 10px 0 0;
+
+    background-color: #787878;
+} */
 </style>

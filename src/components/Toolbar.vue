@@ -1,10 +1,10 @@
 <template>
     <div class="tool-bar">
         <button @click="handleRun">
-            <img src="@/assets/run.svg" />
+            <font-awesome-icon :icon="['fas', 'play']" />
         </button>
         <button @click="handleSave">
-            <img src="@/assets/save.png" :style="{width: '100%'}"/>
+            <font-awesome-icon :icon="['fas', 'floppy-disk']" />
         </button>
     </div>
 </template>
